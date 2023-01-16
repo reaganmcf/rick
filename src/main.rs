@@ -1,6 +1,7 @@
 use clap::{Parser, Subcommand};
 
 mod docs;
+mod fzf;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
@@ -19,7 +20,10 @@ enum Commands {
 #[derive(Subcommand, Debug)]
 enum DocsCommands {
     /// Search tailwind docs
-    Tw
+    Tw,
+
+    /// Search mdn docs
+    Mdn
 }
 
 fn main() {
@@ -28,7 +32,8 @@ fn main() {
     //println!("{:#?}", args.command);
     match args.command {
         Commands::Docs(inner) => match inner {
-            DocsCommands::Tw => docs::tailwind::search_and_open()
+            DocsCommands::Tw => docs::tailwind::search_and_open(),
+            DocsCommands::Mdn => docs::mdn::search_and_open(),
         }
     }
 }

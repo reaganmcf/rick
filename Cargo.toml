@@ -13,3 +13,4 @@ license = "MIT"
 clap = { version = "4.1.1", features = ["derive"] }
 open = "3.2.0"
 skim = "0.10.2"
+titlecase = "2.2.1"
