@@ -16,16 +16,29 @@ impl SkimItem for MdnDocItem {
     }
 
     fn display<'a>(&'a self, _context: DisplayContext<'a>) -> AnsiString<'a> {
-        let parts = self.url_path.split("/").map(|part| part.replace("_", " "));
+        let parts: Vec<String> = self
+            .url_path
+            .split("/")
+            .map(|part| part.replace("_", " "))
+            // Remove "Reference" since it just takes up a bunch of space
+            .filter(|part| part != "Reference")
+            .collect();
 
         // Each additional route is darker, so it fades from dark to light as you read left to
         // right
-        let mut result = String::with_capacity(64);
-        for (idx, part) in parts.enumerate() {
-            let color_code = format!("\u{001b}[38;5;{}m", ((idx * 3) + 235));
-            let colorcode_end = format!("\u{001b}[0m");
-            result = format!("{} {color_code}{}{colorcode_end}", result, part);
-        }
+        let reversed_colored_segments: Vec<String> = parts
+            .into_iter()
+            .rev()
+            .enumerate()
+            .map(|(idx, part)| {
+                let color_code = format!("\u{001b}[38;5;{}m", (255 - (idx * 4)));
+                let colorcode_end = format!("\u{001b}[0m");
+                format!("{color_code}{}{colorcode_end}", part)
+            })
+            .rev()
+            .collect();
+
+        let result = reversed_colored_segments.join(" ");
 
         AnsiString::parse(&result)
     }
@@ -41,7 +54,7 @@ pub fn search_and_open() {
         })
         .map(|item| Box::new(item) as Box<dyn SkimItem>);
 
-    if let Some(selection) = prompt_user_selection(Box::new(items)) {
+    if let Some(selection) = prompt_user_selection("Open MDN Documentation for:", Box::new(items)) {
         let mdn_url = format!("{}{}", MDN_BASE_URL, selection);
 
         println!("Opening...");

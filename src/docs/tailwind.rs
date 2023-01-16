@@ -43,7 +43,9 @@ pub fn search_and_open() {
         })
         .map(|item| Box::new(item) as Box<dyn SkimItem>);
 
-    if let Some(selection) = prompt_user_selection(Box::new(items)) {
+    if let Some(selection) =
+        prompt_user_selection("Open Tailwind Documentation for:", Box::new(items))
+    {
         let tw_url = format!("https://tailwindcss.com/docs/{}", selection);
 
         println!("Opening...");

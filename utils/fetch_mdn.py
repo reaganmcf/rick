@@ -23,7 +23,8 @@ def url_is_useful(s):
             "MDN",
             "Glossary",
             "Games",
-            "Mozilla"
+            "Mozilla",
+            "Learn"
     ]
 
     for category in ignored_categories:
