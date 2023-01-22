@@ -40,11 +40,20 @@ enum TodoCommands {
         desc: Option<String>,
     },
 
+    Edit {
+        #[arg(required = true)]
+        id: usize,
+        #[arg(short = 't', long = "title", required = false)]
+        new_title: Option<String>,
+        #[arg(short = 'd', long = "desc", required = false)]
+        new_desc: Option<String>,
+    },
+
     /// List all your todos
     List,
 
     /// Monitor
-    Monitor
+    Monitor,
 }
 
 fn main() {
@@ -60,6 +69,11 @@ fn main() {
             TodoCommands::Add { title, desc } => todo::add(title, desc),
             TodoCommands::List => todo::list(),
             TodoCommands::Monitor => todo::monitor(),
-        }
+            TodoCommands::Edit {
+                id,
+                new_title,
+                new_desc,
+            } => todo::edit(id, new_title, new_desc),
+        },
     }
 }
