@@ -54,7 +54,7 @@ pub fn delete(id: usize) {
     let mut todos = TodoDB::load();
     match todos.delete(id) {
         Err(msg) => eprintln!("{}", msg),
-        Ok(_) => println!("Successfully deleted task {}", id)
+        Ok(_) => println!("Successfully deleted task {}", id),
     }
     todos.save();
 }

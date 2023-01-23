@@ -66,4 +66,3 @@ pub fn search_and_open() {
         }
     }
 }
-

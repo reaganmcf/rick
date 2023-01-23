@@ -1,6 +1,9 @@
 use skim::prelude::*;
 
-pub fn prompt_user_selection(header: &'static str, items: Box<dyn Iterator<Item = Box<dyn SkimItem>>>) -> Option<String> {
+pub fn prompt_user_selection(
+    header: &'static str,
+    items: Box<dyn Iterator<Item = Box<dyn SkimItem>>>,
+) -> Option<String> {
     let skim_options = SkimOptionsBuilder::default()
         .multi(true)
         .header(Some(header))

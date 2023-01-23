@@ -1,2 +1,2 @@
-pub mod tailwind;
 pub mod mdn;
+pub mod tailwind;
