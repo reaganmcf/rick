@@ -1,8 +1,8 @@
 use clap::{Parser, Subcommand};
 
 mod docs;
-mod fzf;
 mod todo;
+mod utils;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
@@ -39,7 +39,6 @@ enum TodoCommands {
         #[arg(required = false)]
         desc: Option<String>,
     },
-
     Edit {
         #[arg(required = true)]
         id: usize,
@@ -48,11 +47,11 @@ enum TodoCommands {
         #[arg(short = 'd', long = "desc", required = false)]
         new_desc: Option<String>,
     },
-
-    /// List all your todos
+    Delete {
+        #[arg(required = true)]
+        id: usize,
+    },
     List,
-
-    /// Monitor
     Monitor,
 }
 
@@ -67,13 +66,14 @@ fn main() {
         },
         Commands::Todo(inner) => match inner {
             TodoCommands::Add { title, desc } => todo::add(title, desc),
-            TodoCommands::List => todo::list(),
-            TodoCommands::Monitor => todo::monitor(),
             TodoCommands::Edit {
                 id,
                 new_title,
                 new_desc,
             } => todo::edit(id, new_title, new_desc),
+            TodoCommands::List => todo::list(),
+            TodoCommands::Monitor => todo::monitor(),
+            TodoCommands::Delete { id } => todo::delete(id),
         },
     }
 }

@@ -1,4 +1,4 @@
-use crate::fzf::prompt_user_selection;
+use crate::utils::prompt_user_selection;
 use open;
 use skim::prelude::*;
 use std::borrow::Cow;
