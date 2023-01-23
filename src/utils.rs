@@ -9,7 +9,7 @@ pub fn prompt_user_selection(header: &'static str, items: Box<dyn Iterator<Item 
         .unwrap();
 
     let (tx_item, rx_item): (SkimItemSender, SkimItemReceiver) = unbounded();
-    for item in items.into_iter() {
+    for item in items {
         tx_item
             .send(item.into())
             .expect("Failed to send item to Skim");
@@ -24,7 +24,7 @@ pub fn prompt_user_selection(header: &'static str, items: Box<dyn Iterator<Item 
                 out.selected_items
             }
         })
-        .unwrap_or_else(|| Vec::new());
+        .unwrap_or_else(Vec::new);
 
     selected_items
         .first()

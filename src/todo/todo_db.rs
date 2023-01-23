@@ -5,13 +5,15 @@ use std::iter::IntoIterator;
 
 use super::todo_item::TodoItem;
 
-const DB_PATH: &'static str = ".rick/";
-const TODOS_DB_ID: &'static str = "todos";
+const DB_PATH: &str = ".rick/";
+const TODOS_DB_ID: &str = "todos";
 
 fn get_db() -> Store {
-    let mut cfg = jfs::Config::default();
-    cfg.pretty = true;
-    cfg.indent = 4;
+    let cfg = jfs::Config {
+        pretty: true,
+        indent: 4,
+        ..Default::default()
+    };
     Store::new_with_cfg(DB_PATH, cfg).unwrap()
 }
 
@@ -86,7 +88,8 @@ impl IntoIterator for TodoDB {
     type IntoIter = std::vec::IntoIter<Self::Item>;
 
     fn into_iter(self) -> Self::IntoIter {
-        // We don't care about the ID here
+        // We don't care about the ID here.
+        #[allow(clippy::needless_collect)]
         let t: Vec<Self::Item> = self.inner.into_iter().map(|item| item.1).collect();
         t.into_iter()
     }

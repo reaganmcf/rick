@@ -3,7 +3,7 @@ use open;
 use skim::prelude::*;
 use std::borrow::Cow;
 
-pub const MDN_OPTIONS_BYTES: &'static [u8] = include_bytes!("./../../data/mdn_urls.txt");
+pub const MDN_OPTIONS_BYTES: &[u8] = include_bytes!("./../../data/mdn_urls.txt");
 pub const MDN_BASE_URL: &str = "https://developer.mozilla.org/en-US/docs";
 
 struct MdnDocItem {
@@ -16,10 +16,13 @@ impl SkimItem for MdnDocItem {
     }
 
     fn display<'a>(&'a self, _context: DisplayContext<'a>) -> AnsiString<'a> {
+        // We have to collect and into_iter() right after because we can't reverse an unknown
+        // length iterator
+        #[allow(clippy::needless_collect)]
         let parts: Vec<String> = self
             .url_path
-            .split("/")
-            .map(|part| part.replace("_", " "))
+            .split('/')
+            .map(|part| part.replace('_', " "))
             // Remove "Reference" since it just takes up a bunch of space
             .filter(|part| part != "Reference")
             .collect();
@@ -32,7 +35,7 @@ impl SkimItem for MdnDocItem {
             .enumerate()
             .map(|(idx, part)| {
                 let color_code = format!("\u{001b}[38;5;{}m", (255 - (idx * 4)));
-                let colorcode_end = format!("\u{001b}[0m");
+                let colorcode_end = "\u{001b}[0m".to_string();
                 format!("{color_code}{}{colorcode_end}", part)
             })
             .rev()
@@ -48,7 +51,7 @@ pub fn search_and_open() {
     let mdn_urls = Box::leak(Box::new(String::from_utf8_lossy(MDN_OPTIONS_BYTES)));
 
     let items = mdn_urls
-        .split("\n")
+        .split('\n')
         .map(|url_path| MdnDocItem {
             url_path: url_path.to_string(),
         })

@@ -27,7 +27,7 @@ impl SkimItem for TwDocItem {
     }
 
     fn display<'a>(&'a self, _context: DisplayContext<'a>) -> AnsiString<'a> {
-        let text = titlecase(&self.url_path.replace("-", " "));
+        let text = titlecase(&self.url_path.replace('-', " "));
 
         let result = format!("\u{001b}[38;5;253m{}", text);
 
@@ -37,7 +37,7 @@ impl SkimItem for TwDocItem {
 
 pub fn search_and_open() {
     let items = TW_DOCS_OPTIONS
-        .split("\n")
+        .split('\n')
         .map(|url_path| TwDocItem {
             url_path: url_path.to_string(),
         })
