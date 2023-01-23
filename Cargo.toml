@@ -13,7 +13,7 @@ license = "MIT"
 clap = { version = "4.1.1", features = ["derive"] }
 jfs = "0.8.0"
 open = "3.2.0"
-serde = { verison = "1.0.152", features = ["derive"] }
+serde = { version = "1.0.152", features = ["derive"] }
 skim = "0.10.2"
 termimad = "0.20.6"
 titlecase = "2.2.1"
