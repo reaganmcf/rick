@@ -1,6 +1,6 @@
 [package]
 name = "rick"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 author = "reaganmcf"
 description = "A cross platform, general productivity tool that speeds up your workflows straight from the command line."
