@@ -2,10 +2,10 @@ use jfs::Store;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::iter::IntoIterator;
+use directories::ProjectDirs;
 
 use super::todo_item::TodoItem;
 
-const DB_PATH: &str = ".rick/";
 const TODOS_DB_ID: &str = "todos";
 
 fn get_db() -> Store {
@@ -14,7 +14,9 @@ fn get_db() -> Store {
         indent: 4,
         ..Default::default()
     };
-    Store::new_with_cfg(DB_PATH, cfg).unwrap()
+    let proj_dirs = ProjectDirs::from("com", "reaganmcf", "rick").expect("Unable to find where to put config file. Please open a bug report");
+    let config_path = proj_dirs.config_dir();
+    Store::new_with_cfg(config_path, cfg).unwrap()
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
