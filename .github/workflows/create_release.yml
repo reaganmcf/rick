@@ -94,27 +94,6 @@ jobs:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
 
-  crates-io-release:
-    name: crates.io Release
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Setup | Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup | Toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-
-      - name: Publish
-        uses: actions-rs/cargo@v1
-        with:
-          command: publish
-          args: --token ${{ secrets.CRATES_IO_TOKEN }}
-
   github-release:
     name: GitHub Release
     needs: binaries
@@ -138,3 +117,26 @@ jobs:
           files: |
             rick-*/rick-*
             LICENSE.md
+  
+  crates-io-release:
+    name: crates.io Release
+    needs: github-release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup | Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Publish
+        uses: actions-rs/cargo@v1
+        with:
+          command: publish
+          args: --token ${{ secrets.CRATES_IO_TOKEN }}
+
