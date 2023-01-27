@@ -14,32 +14,9 @@ pub const TW_DOCS_OPTIONS: &str = "installation\neditor-setup\nusing-with-prepro
 
 use crate::utils::prompt_user_selection;
 use open;
-use titlecase::titlecase;
-
-struct TwDocItem {
-    url_path: String,
-}
-
-//impl SkimItem for TwDocItem {
-//    fn text(&self) -> Cow<str> {
-//        Cow::Borrowed(&self.url_path)
-//    }
-//
-//    fn display<'a>(&'a self, _context: DisplayContext<'a>) -> AnsiString<'a> {
-//        let text = titlecase(&self.url_path.replace('-', " "));
-//
-//        let result = format!("\u{001b}[38;5;253m{}", text);
-//
-//        AnsiString::parse(&result)
-//    }
-//}
 
 pub fn search_and_open() {
     let items = TW_DOCS_OPTIONS.split('\n').map(String::from).collect();
-    //.map(|url_path| TwDocItem {
-    //    url_path: url_path.to_string(),
-    //})
-    //.map(|item| Box::new(item) as Box<dyn SkimItem>);
 
     if let Some(selection) = prompt_user_selection("Open Tailwind Documentation for:", items) {
         let tw_url = format!("https://tailwindcss.com/docs/{}", selection);

@@ -5,6 +5,7 @@ pub fn prompt_user_selection(header: &'static str, items: Vec<String>) -> Option
     let mut child = Command::new("fzf")
         .stdin(Stdio::piped())
         .stdout(Stdio::piped())
+        .arg(format!("--prompt={header}"))
         .spawn()
         .expect("Could not launch fzf");
 
@@ -16,8 +17,6 @@ pub fn prompt_user_selection(header: &'static str, items: Vec<String>) -> Option
         .write_all(options.as_bytes())
         .expect("Failed to write to child stdin");
 
-    drop(child_stdin);
-
     let output = String::from_utf8(
         child
             .wait_with_output()
@@ -28,7 +27,7 @@ pub fn prompt_user_selection(header: &'static str, items: Vec<String>) -> Option
 
     let trimmed = output.trim();
 
-    if trimmed.len() == 0 {
+    if trimmed.is_empty() {
         None
     } else {
         Some(trimmed.to_string())
