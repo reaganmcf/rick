@@ -14,4 +14,3 @@ jfs = "0.8.0"
 open = "3.2.0"
 serde = { version = "1.0.152", features = ["derive"] }
 termimad = "0.20.6"
-titlecase = "2.2.1"
