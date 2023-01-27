@@ -58,7 +58,7 @@ enum TodoCommands {
     List,
     /// Monitor your todos, refreshing periodically (default is 5 seconds)
     Monitor {
-        #[arg(required = false, help = "seconds to wait before refreshing")]
+        #[arg(short = 't', long = "timeout", required = false, help = "seconds to wait before refreshing")]
         timeout: Option<u64>
     }
 }
