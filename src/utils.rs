@@ -1,35 +1,36 @@
-use skim::prelude::*;
+use std::io::Write;
+use std::process::{Command, Stdio};
 
-pub fn prompt_user_selection(
-    header: &'static str,
-    items: Box<dyn Iterator<Item = Box<dyn SkimItem>>>,
-) -> Option<String> {
-    let skim_options = SkimOptionsBuilder::default()
-        .multi(true)
-        .header(Some(header))
-        .case(CaseMatching::Ignore)
-        .build()
-        .unwrap();
+pub fn prompt_user_selection(header: &'static str, items: Vec<String>) -> Option<String> {
+    let mut child = Command::new("fzf")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect("Could not launch fzf");
 
-    let (tx_item, rx_item): (SkimItemSender, SkimItemReceiver) = unbounded();
-    for item in items {
-        tx_item
-            .send(item.into())
-            .expect("Failed to send item to Skim");
+    let options = items
+        .into_iter()
+        .fold(String::new(), |a, b| format!("{a}{b}\n"));
+    let child_stdin = child.stdin.as_mut().unwrap();
+    child_stdin
+        .write_all(options.as_bytes())
+        .expect("Failed to write to child stdin");
+
+    drop(child_stdin);
+
+    let output = String::from_utf8(
+        child
+            .wait_with_output()
+            .expect("Failed to wait for child output")
+            .stdout,
+    )
+    .expect("failed to parse output as string");
+
+    let trimmed = output.trim();
+
+    if trimmed.len() == 0 {
+        None
+    } else {
+        Some(trimmed.to_string())
     }
-    drop(tx_item);
-
-    let selected_items = Skim::run_with(&skim_options, Some(rx_item))
-        .map(|out| match out.final_key {
-            Key::ESC | Key::Ctrl('c') => vec![],
-            _ => {
-                println!("{:?}", out.final_key);
-                out.selected_items
-            }
-        })
-        .unwrap_or_else(Vec::new);
-
-    selected_items
-        .first()
-        .map(|item| item.output().into_owned())
 }
