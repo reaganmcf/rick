@@ -33,12 +33,14 @@ enum DocsCommands {
 
 #[derive(Subcommand, Debug)]
 enum TodoCommands {
+    /// Add a new todo
     Add {
         #[arg(required = true)]
         title: String,
         #[arg(required = false)]
         desc: Option<String>,
     },
+    /// Edit a todo by id
     Edit {
         #[arg(required = true)]
         id: usize,
@@ -47,12 +49,18 @@ enum TodoCommands {
         #[arg(short = 'd', long = "desc", required = false)]
         new_desc: Option<String>,
     },
+    /// Delete a todo by id
     Delete {
         #[arg(required = true)]
         id: usize,
     },
+    /// List all of your current todos
     List,
-    Monitor,
+    /// Monitor your todos, refreshing periodically (default is 5 seconds)
+    Monitor {
+        #[arg(required = false, help = "seconds to wait before refreshing")]
+        timeout: Option<u64>
+    }
 }
 
 fn main() {
@@ -72,7 +80,7 @@ fn main() {
                 new_desc,
             } => todo::edit(id, new_title, new_desc),
             TodoCommands::List => todo::list(),
-            TodoCommands::Monitor => todo::monitor(),
+            TodoCommands::Monitor { timeout } => todo::monitor(timeout.unwrap_or(5)),
             TodoCommands::Delete { id } => todo::delete(id),
         },
     }

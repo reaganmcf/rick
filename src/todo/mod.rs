@@ -30,14 +30,14 @@ pub fn add(title: String, desc: Option<String>) {
     todos.save();
 }
 
-pub fn monitor() {
+pub fn monitor(secs_to_wait: u64) {
     loop {
         // Clear screen
         println!("\x1bc");
 
         list();
 
-        std::thread::sleep(Duration::from_secs(5));
+        std::thread::sleep(Duration::from_secs(secs_to_wait));
     }
 }
 
