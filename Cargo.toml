@@ -1,6 +1,6 @@
 [package]
 name = "rick"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 description = "A cross platform, general productivity tool that speeds up your workflows straight from the command line."
 repository = "https://github.com/reaganmcf/rick"
@@ -9,7 +9,7 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-clap = { version = "4.1.1", features = ["derive"] }
+clap = { version = "4.4.2", features = ["derive"] }
 directories = "4.0.1"
 jfs = "0.8.0"
 open = "3.2.0"

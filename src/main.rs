@@ -56,11 +56,16 @@ enum TodoCommands {
     },
     /// List all of your current todos
     List,
-    /// Monitor your todos, refreshing periodically (default is 5 seconds)
-    Monitor {
-        #[arg(short = 't', long = "timeout", required = false, help = "seconds to wait before refreshing")]
-        timeout: Option<u64>
-    }
+    /// Watch your todos, refreshing periodically (default is 5 seconds)
+    Watch {
+        #[arg(
+            short = 't',
+            long = "timeout",
+            required = false,
+            help = "seconds to wait before refreshing"
+        )]
+        timeout: Option<u64>,
+    },
 }
 
 fn main() {
@@ -80,7 +85,7 @@ fn main() {
                 new_desc,
             } => todo::edit(id, new_title, new_desc),
             TodoCommands::List => todo::list(),
-            TodoCommands::Monitor { timeout } => todo::monitor(timeout.unwrap_or(5)),
+            TodoCommands::Watch { timeout } => todo::watch(timeout.unwrap_or(5)),
             TodoCommands::Delete { id } => todo::delete(id),
         },
     }
