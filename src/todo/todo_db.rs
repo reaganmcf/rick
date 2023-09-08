@@ -1,8 +1,8 @@
+use directories::ProjectDirs;
 use jfs::Store;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::iter::IntoIterator;
-use directories::ProjectDirs;
 
 use super::todo_item::TodoItem;
 
@@ -14,7 +14,8 @@ fn get_db() -> Store {
         indent: 4,
         ..Default::default()
     };
-    let proj_dirs = ProjectDirs::from("com", "reaganmcf", "rick").expect("Unable to find where to put config file. Please open a bug report");
+    let proj_dirs = ProjectDirs::from("com", "reaganmcf", "rick")
+        .expect("Unable to find where to put config file. Please open a bug report");
     let config_path = proj_dirs.config_dir();
     Store::new_with_cfg(config_path, cfg).unwrap()
 }
